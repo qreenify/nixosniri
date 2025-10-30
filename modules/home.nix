@@ -314,4 +314,37 @@
     slurp
     wl-clipboard
   ];
+
+  # === Auto-backup NixOS config to GitHub ===
+  systemd.user.services.nixos-config-backup = {
+    Unit = {
+      Description = "Backup NixOS configuration to GitHub";
+    };
+    Service = {
+      Type = "oneshot";
+      WorkingDirectory = "/home/qreenify/claude";
+      ExecStart = pkgs.writeShellScript "nixos-config-backup" ''
+        set -e
+        ${pkgs.git}/bin/git add -A
+        if ! ${pkgs.git}/bin/git diff-index --quiet HEAD --; then
+          ${pkgs.git}/bin/git commit -m "Auto-backup: $(date '+%Y-%m-%d %H:%M:%S')"
+          ${pkgs.git}/bin/git push origin main
+        fi
+      '';
+    };
+  };
+
+  systemd.user.timers.nixos-config-backup = {
+    Unit = {
+      Description = "Timer for NixOS configuration backup";
+    };
+    Timer = {
+      OnBootSec = "5m";
+      OnUnitActiveSec = "1h";
+      Persistent = true;
+    };
+    Install = {
+      WantedBy = [ "timers.target" ];
+    };
+  };
 }
