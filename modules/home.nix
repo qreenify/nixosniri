@@ -314,11 +314,15 @@
     QT_STYLE_OVERRIDE = "adwaita-dark";
   };
 
+  # === Font Configuration ===
+  fonts.fontconfig.enable = true;
+
   # === Packages ===
   home.packages = with pkgs; [
     # Fonts
     jetbrains-mono
     nerd-fonts.jetbrains-mono
+    font-awesome
 
     # Niri utilities
     swaybg
