@@ -78,6 +78,14 @@ rebuild  # Apply changes (rebuild NixOS)
 n        # Open nvim
 ```
 
+## 📚 Learning Neovim
+
+Check out [NEOVIM-GUIDE.md](NEOVIM-GUIDE.md) for:
+- Complete keybinding reference
+- Learning path from beginner to advanced
+- Tips and tricks to improve your workflow
+- **Pro tip:** Press `Space` in nvim and wait - which-key will show you available commands!
+
 ## How to Modify
 
 ### Add a package

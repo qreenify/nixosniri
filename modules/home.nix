@@ -46,6 +46,9 @@
     vimdiffAlias = true;
 
     plugins = with pkgs.vimPlugins; [
+      # Learning aid - shows keybindings as you type
+      which-key-nvim
+
       # File explorer
       nvim-tree-lua
       nvim-web-devicons
@@ -72,6 +75,7 @@
 
       # Git integration
       gitsigns-nvim
+      vim-fugitive
 
       # LSP
       nvim-lspconfig
@@ -86,6 +90,15 @@
 
       # Indent guides
       indent-blankline-nvim
+
+      # Surround text objects (helps learn vim motions)
+      nvim-surround
+
+      # Better quickfix window
+      trouble-nvim
+
+      # Undo tree visualization
+      undotree
     ];
 
     extraLuaConfig = ''
@@ -107,6 +120,30 @@
 
       -- Set leader key
       vim.g.mapleader = ' '
+
+      -- Which-key: Shows available keybindings in a popup
+      -- This helps you learn shortcuts as you type!
+      local wk = require("which-key")
+      wk.setup({
+        plugins = {
+          marks = true,
+          registers = true,
+          spelling = { enabled = true },
+        },
+        window = {
+          border = "rounded",
+          padding = { 1, 2, 1, 2 },
+        },
+      })
+
+      -- Register key groups with descriptions
+      wk.register({
+        ["<leader>f"] = { name = "Find (Telescope)" },
+        ["<leader>g"] = { name = "Git" },
+        ["<leader>c"] = { name = "Code" },
+        ["<leader>t"] = { name = "Trouble/Diagnostics" },
+        ["<leader>u"] = { name = "Undo Tree" },
+      })
 
       -- Color scheme
       require("catppuccin").setup({
@@ -168,6 +205,27 @@
       -- Indent blankline
       require('ibl').setup()
 
+      -- Nvim-surround: Easily surround text with quotes, brackets, etc.
+      -- Usage: ys + motion + character (e.g., ysiw" to surround word with quotes)
+      --        ds + character to delete surroundings
+      --        cs + old + new to change surroundings
+      require('nvim-surround').setup()
+
+      -- Trouble: Better diagnostics and quickfix list
+      require('trouble').setup()
+      vim.keymap.set('n', '<leader>xx', '<cmd>Trouble diagnostics toggle<cr>', { desc = 'Toggle Trouble' })
+      vim.keymap.set('n', '<leader>xd', '<cmd>Trouble diagnostics toggle filter.buf=0<cr>', { desc = 'Document Diagnostics' })
+
+      -- Undo tree: Visualize your undo history
+      vim.keymap.set('n', '<leader>u', vim.cmd.UndotreeToggle, { desc = 'Toggle Undo Tree' })
+
+      -- Git shortcuts (vim-fugitive + gitsigns)
+      vim.keymap.set('n', '<leader>gs', vim.cmd.Git, { desc = 'Git Status' })
+      vim.keymap.set('n', '<leader>gc', ':Git commit<CR>', { desc = 'Git Commit' })
+      vim.keymap.set('n', '<leader>gp', ':Git push<CR>', { desc = 'Git Push' })
+      vim.keymap.set('n', '<leader>gl', ':Git pull<CR>', { desc = 'Git Pull' })
+      vim.keymap.set('n', '<leader>gb', ':Git blame<CR>', { desc = 'Git Blame' })
+
       -- LSP and completion
       local cmp = require('cmp')
       local luasnip = require('luasnip')
@@ -211,24 +269,43 @@
       local lspconfig = require('lspconfig')
       local capabilities = require('cmp_nvim_lsp').default_capabilities()
 
-      -- Keymaps for LSP
+      -- Keymaps for LSP (when attached to a buffer)
       vim.api.nvim_create_autocmd('LspAttach', {
         callback = function(args)
           local opts = { buffer = args.buf }
-          vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
-          vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
-          vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, opts)
-          vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, opts)
+          vim.keymap.set('n', 'gd', vim.lsp.buf.definition, vim.tbl_extend('force', opts, { desc = 'Go to Definition' }))
+          vim.keymap.set('n', 'K', vim.lsp.buf.hover, vim.tbl_extend('force', opts, { desc = 'Hover Documentation' }))
+          vim.keymap.set('n', '<leader>rn', vim.lsp.buf.rename, vim.tbl_extend('force', opts, { desc = 'Rename Symbol' }))
+          vim.keymap.set('n', '<leader>ca', vim.lsp.buf.code_action, vim.tbl_extend('force', opts, { desc = 'Code Action' }))
+          vim.keymap.set('n', 'gr', vim.lsp.buf.references, vim.tbl_extend('force', opts, { desc = 'Find References' }))
         end,
       })
 
-      -- Additional keymaps
-      vim.keymap.set('n', '<leader>w', ':w<CR>')
-      vim.keymap.set('n', '<leader>q', ':q<CR>')
-      vim.keymap.set('n', '<C-h>', '<C-w>h')
-      vim.keymap.set('n', '<C-j>', '<C-w>j')
-      vim.keymap.set('n', '<C-k>', '<C-w>k')
-      vim.keymap.set('n', '<C-l>', '<C-w>l')
+      -- Basic file operations
+      vim.keymap.set('n', '<leader>w', ':w<CR>', { desc = 'Save File' })
+      vim.keymap.set('n', '<leader>q', ':q<CR>', { desc = 'Quit' })
+      vim.keymap.set('n', '<leader>wq', ':wq<CR>', { desc = 'Save and Quit' })
+
+      -- Window navigation (Ctrl+hjkl to move between splits)
+      vim.keymap.set('n', '<C-h>', '<C-w>h', { desc = 'Move to Left Window' })
+      vim.keymap.set('n', '<C-j>', '<C-w>j', { desc = 'Move to Lower Window' })
+      vim.keymap.set('n', '<C-k>', '<C-w>k', { desc = 'Move to Upper Window' })
+      vim.keymap.set('n', '<C-l>', '<C-w>l', { desc = 'Move to Right Window' })
+
+      -- Better indenting (stay in visual mode)
+      vim.keymap.set('v', '<', '<gv', { desc = 'Indent Left' })
+      vim.keymap.set('v', '>', '>gv', { desc = 'Indent Right' })
+
+      -- Move selected lines up/down
+      vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv", { desc = 'Move Line Down' })
+      vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv", { desc = 'Move Line Up' })
+
+      -- Keep cursor centered when scrolling
+      vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Scroll Down (Centered)' })
+      vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Scroll Up (Centered)' })
+
+      -- Learning tip: Press Space and wait to see all available shortcuts!
+      -- The which-key popup will show you what you can do.
     '';
   };
 
