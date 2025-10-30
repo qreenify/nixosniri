@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+set -euo pipefail
+name=""; desc=""
+if command -v pactl >/dev/null 2>&1; then
+  name="$(pactl get-default-sink 2>/dev/null || true)"
+  if [[ -n "$name" ]]; then
+    desc="$(pactl list sinks 2>/dev/null | awk -v n="$name" '
+      $0 ~ "Name: <" n ">" {f=1}
+      f && /^Description:/ {sub(/^Description: /,""); print; exit}
+      f && /^$/ {f=0}
+    ')"
+  fi
+elif command -v wpctl >/dev/null 2>&1; then
+  name="$(wpctl status 2>/dev/null | awk '/Sinks:/{f=1;next} f&&/\*/{print $2; exit}')"
+  desc="$name"
+fi
+txt="${desc:-${name:-unknown}}"
+icon=""; cls="unknown"; alt="unknown"
+grep -Eiq 'head(phone|set)|earbud|fiio|usb.*iec958|a2dp|bluez|bt|bose|sony|xm[345]' <<<"$txt" && { icon=""; cls="headphones"; alt="headphones"; }
+grep -Eiq 'speaker|t60|analog|line out|built-?in|hdmi|display|monitor' <<<"$txt" && { icon=""; cls="speakers"; alt="speakers"; }
+printf '{"text":"%s","alt":"%s","class":"%s","tooltip":"%s"}\n' "$icon" "$alt" "$cls" "$txt"

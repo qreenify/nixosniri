@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Get current time
+TIME=$(date +"%H:%M")
+
+ALT="unknown"; CLASS="unknown"; TIP="Mic: unknown"
+
+if command -v wpctl >/dev/null 2>&1; then
+  S=$(wpctl get-volume @DEFAULT_AUDIO_SOURCE@ 2>/dev/null || true)
+  if echo "$S" | grep -q '\[MUTED\]'; then
+    ALT="muted"; CLASS="muted"; TIP="Mic: muted"
+  elif [[ -n "$S" ]]; then
+    ALT="live"; CLASS="live"; TIP="Mic: live"
+  fi
+elif command -v pactl >/dev/null 2>&1; then
+  M=$(pactl get-source-mute @DEFAULT_SOURCE@ 2>/dev/null || true)
+  if echo "$M" | grep -iq 'yes'; then
+    ALT="muted"; CLASS="muted"; TIP="Mic: muted"
+  elif [[ -n "$M" ]]; then
+    ALT="live"; CLASS="live"; TIP="Mic: live"
+  fi
+fi
+
+# Waybar custom module (return-type=json) - show time instead of status text
+printf '{"text":"%s","alt":"%s","class":"%s","tooltip":"%s"}\n' "$TIME" "$ALT" "$CLASS" "$TIP"

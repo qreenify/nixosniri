@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+notify() {
+  command -v notify-send >/dev/null && notify-send -i microphone-sensitivity-"$1" "Mic" "$2"
+}
+
+if command -v wpctl >/dev/null 2>&1; then
+  if wpctl get-volume @DEFAULT_AUDIO_SOURCE@ 2>/dev/null | grep -q '\[MUTED\]'; then
+    wpctl set-mute @DEFAULT_AUDIO_SOURCE@ 0
+    #notify high "Unmuted"
+  else
+    wpctl set-mute @DEFAULT_AUDIO_SOURCE@ 1
+    #notify muted "Muted"
+  fi
+elif command -v pactl >/dev/null 2>&1; then
+  pactl set-source-mute @DEFAULT_SOURCE@ toggle
+  # Best-effort message (pactl doesn’t echo new state; Waybar refresh will reflect it)
+  #notify muted "Toggled"
+else
+  echo "Error: need wpctl or pactl" >&2
+  exit 1
+fi
+
+# Nudge Waybar custom module to refresh (signal 8 below)
+pkill -SIGRTMIN+8 waybar >/dev/null 2>&1 || true
