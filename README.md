@@ -49,11 +49,9 @@ Clean, flat module structure. Each file does one thing.
 # 1. Backup
 sudo cp -r /etc/nixos /etc/nixos.backup
 
-# 2. Copy configs
+# 2. Deploy configs (automated)
 cd /home/qreenify/claude
-sudo cp flake.nix /etc/nixos/
-sudo cp -r modules /etc/nixos/
-sudo cp -r config /etc/nixos/
+./deploy.sh
 
 # 3. Install scripts
 mkdir -p ~/.script
@@ -65,6 +63,19 @@ cd /etc/nixos
 sudo rm flake.lock
 sudo nix flake update
 sudo nixos-rebuild switch --flake /etc/nixos#nixos
+```
+
+## Daily Workflow
+
+After the initial setup, use these aliases for quick updates:
+
+```bash
+# Edit your config in ~/claude, then:
+deploy   # Copy changes to /etc/nixos
+rebuild  # Apply changes (rebuild NixOS)
+
+# Other useful aliases:
+n        # Open nvim
 ```
 
 ## How to Modify

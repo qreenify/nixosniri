@@ -17,6 +17,11 @@
         edit_mode: vi
       }
     '';
+    shellAliases = {
+      n = "nvim";
+      rebuild = "sudo nixos-rebuild switch --flake /etc/nixos#nixos";
+      deploy = "~/claude/deploy.sh";
+    };
   };
 
   # === Git Configuration ===
