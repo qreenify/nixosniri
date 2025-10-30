@@ -14,6 +14,7 @@
   environment.systemPackages = with pkgs; [
     # System utilities
     git
+    gh
     sbctl
 
     # Development
