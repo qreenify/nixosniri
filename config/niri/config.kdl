@@ -1,8 +1,5 @@
 // Niri configuration - imported from archniri with dark mode theming
 
-// Enable XWayland for X11 apps like Steam
-prefer-xwayland true
-
 input {
     keyboard {
         xkb {
