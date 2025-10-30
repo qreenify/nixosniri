@@ -22,9 +22,9 @@
   # === Git Configuration ===
   programs.git = {
     enable = true;
-    userName = "qreenify";
-    userEmail = "qreenify@users.noreply.github.com";
-    extraConfig = {
+    settings = {
+      user.name = "qreenify";
+      user.email = "qreenify@users.noreply.github.com";
       init.defaultBranch = "main";
       pull.rebase = false;
       core.editor = "nvim";
