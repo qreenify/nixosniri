@@ -13,11 +13,17 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    zen-browser = {
+      url = "github:MarceColl/zen-browser-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
-  outputs = { self, nixpkgs, lanzaboote, home-manager, ... }: {
+  outputs = { self, nixpkgs, lanzaboote, home-manager, zen-browser, ... }: {
     nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
+      specialArgs = { inherit zen-browser; };
       modules = [
         # Hardware
         ./hardware-configuration.nix

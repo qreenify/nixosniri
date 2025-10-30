@@ -8,6 +8,17 @@
   programs.home-manager.enable = true;
   xdg.enable = true;
 
+  # === Nushell Configuration ===
+  programs.nushell = {
+    enable = true;
+    configFile.text = ''
+      $env.config = {
+        show_banner: false
+        edit_mode: vi
+      }
+    '';
+  };
+
   # === Git Configuration ===
   programs.git = {
     enable = true;

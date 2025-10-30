@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ config, pkgs, zen-browser, ... }:
 
 {
   # Enable Steam
@@ -25,7 +25,7 @@
     # Browsers
     brave
     chromium
-    zen-browser
+    zen-browser.packages."${pkgs.system}".default
 
     # Communication
     discord
