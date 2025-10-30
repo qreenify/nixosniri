@@ -25,6 +25,7 @@
     # Browsers
     brave
     chromium
+    zen-browser
 
     # Communication
     discord

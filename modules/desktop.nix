@@ -4,6 +4,9 @@
   # Niri compositor
   programs.niri.enable = true;
 
+  # Enable XWayland for compatibility (Steam, etc.)
+  programs.xwayland.enable = true;
+
   # Waybar - started by niri, not systemd
   # programs.waybar.enable = true;  # Disabled to avoid duplicate instances
 
