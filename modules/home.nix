@@ -411,6 +411,7 @@
     grim
     slurp
     wl-clipboard
+    xwayland-satellite  # Required for XWayland apps (Steam, etc.) to work with Niri
   ];
 
   # === Auto-backup NixOS config to GitHub ===
