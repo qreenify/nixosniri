@@ -153,6 +153,20 @@ window-rule {
     open-on-workspace "3"
 }
 
+// Battle.net launcher on workspace 3 with Steam
+window-rule {
+    match title="Battle.net"
+    open-on-output "DP-2"
+    open-on-workspace "3"
+}
+
+// Steam games/launchers - default to workspace 3
+window-rule {
+    match app-id="steam_app_0"
+    open-on-output "DP-2"
+    open-on-workspace "3"
+}
+
 // Lutris on workspace 3, main monitor (DP-2)
 window-rule {
     match app-id="lutris"
