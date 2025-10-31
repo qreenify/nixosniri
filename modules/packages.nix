@@ -11,6 +11,13 @@
   # Enable gamemode for better gaming performance
   programs.gamemode.enable = true;
 
+  # Sunshine game streaming server
+  services.sunshine = {
+    enable = true;
+    openFirewall = true;
+    capSysAdmin = true;
+  };
+
   environment.systemPackages = with pkgs; [
     # System utilities
     git
