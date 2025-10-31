@@ -21,6 +21,9 @@
       n = "nvim";
       rebuild = "sudo nixos-rebuild switch --flake /etc/nixos#nixos";
       deploy = "~/claude/deploy.sh";
+      gdrive-start = "systemctl --user start rclone-gdrive";
+      gdrive-stop = "systemctl --user stop rclone-gdrive";
+      gdrive-status = "systemctl --user status rclone-gdrive";
     };
   };
 
@@ -444,6 +447,27 @@
     };
     Install = {
       WantedBy = [ "timers.target" ];
+    };
+  };
+
+  # === Rclone Google Drive Mount ===
+  systemd.user.services.rclone-gdrive = {
+    Unit = {
+      Description = "Rclone mount for Google Team Drive (Wonderland)";
+      After = [ "network-online.target" ];
+      Wants = [ "network-online.target" ];
+    };
+    Service = {
+      Type = "notify";
+      ExecStartPre = "/run/current-system/sw/bin/mkdir -p /mnt/gdrive-wonderland";
+      ExecStart = "${pkgs.rclone}/bin/rclone mount wonderland: /mnt/gdrive-wonderland --vfs-cache-mode writes --log-level INFO";
+      ExecStop = "/run/current-system/sw/bin/fusermount -u /mnt/gdrive-wonderland";
+      Restart = "on-failure";
+      RestartSec = "10s";
+      Environment = [ "PATH=/run/wrappers/bin/:$PATH" ];
+    };
+    Install = {
+      WantedBy = [ "default.target" ];
     };
   };
 }
