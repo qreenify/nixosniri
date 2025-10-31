@@ -136,5 +136,27 @@
     grim
     slurp
     wl-clipboard
+
+    # Audio
+    noisetorch
   ];
+
+  # NoiseTorch systemd service for automatic noise suppression
+  systemd.user.services.noisetorch = {
+    Unit = {
+      Description = "NoiseTorch Noise Suppression";
+      After = [ "pipewire.service" ];
+      Requires = [ "pipewire.service" ];
+    };
+    Service = {
+      Type = "oneshot";
+      RemainAfterExit = true;
+      ExecStart = "${pkgs.noisetorch}/bin/noisetorch -i -s alsa_input.usb-Beyerdynamic_FOX-00.mono-fallback";
+      ExecStop = "${pkgs.noisetorch}/bin/noisetorch -u";
+      Restart = "on-failure";
+    };
+    Install = {
+      WantedBy = [ "default.target" ];
+    };
+  };
 }
