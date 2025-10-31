@@ -112,3 +112,19 @@ tooltip {
 tooltip label {
     color: #888888;
 }
+
+#tray {
+    background-color: rgba(20, 20, 20, 0.8);
+    padding: 0 10px;
+    margin: 0 4px;
+    border-radius: 4px;
+}
+
+#tray > .passive {
+    -gtk-icon-effect: dim;
+}
+
+#tray > .needs-attention {
+    -gtk-icon-effect: highlight;
+    background-color: rgba(100, 50, 50, 0.8);
+}

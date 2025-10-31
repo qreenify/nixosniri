@@ -57,5 +57,11 @@
     "rewrite": {
       "": "Desktop"
     }
+  },
+
+  // System tray for app icons (Sunshine, etc.)
+  "tray": {
+    "icon-size": 16,
+    "spacing": 8
   }
 }
