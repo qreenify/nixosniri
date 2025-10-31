@@ -15,7 +15,7 @@ elif command -v wpctl >/dev/null 2>&1; then
   desc="$name"
 fi
 txt="${desc:-${name:-unknown}}"
-icon=""; cls="unknown"; alt="unknown"
-grep -Eiq 'head(phone|set)|earbud|fiio|usb.*iec958|a2dp|bluez|bt|bose|sony|xm[345]' <<<"$txt" && { icon=""; cls="headphones"; alt="headphones"; }
-grep -Eiq 'speaker|t60|analog|line out|built-?in|hdmi|display|monitor' <<<"$txt" && { icon=""; cls="speakers"; alt="speakers"; }
+icon="󰓃"; cls="unknown"; alt="unknown"  # Default speaker icon (nerd font)
+grep -Eiq 'head(phone|set)|earbud|fiio|usb.*iec958|a2dp|bluez|bt|bose|sony|xm[345]' <<<"$txt" && { icon="󰋋"; cls="headphones"; alt="headphones"; }  # Headphone icon
+grep -Eiq 'speaker|t60|analog|line out|built-?in|hdmi|display|monitor' <<<"$txt" && { icon="󰓃"; cls="speakers"; alt="speakers"; }  # Speaker icon
 printf '{"text":"%s","alt":"%s","class":"%s","tooltip":"%s"}\n' "$icon" "$alt" "$cls" "$txt"
