@@ -11,6 +11,7 @@
     "custom/mic"
   ],
   "modules-right": [
+    "tray",
     "niri/window-title",
     "custom/audio-out"
   ],
