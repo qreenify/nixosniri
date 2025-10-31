@@ -88,7 +88,7 @@ spawn-at-startup "waybar"
 // Note: Workspace layout script from archniri - you may need to adapt or disable this
 // spawn-sh-at-startup "~/.script/workspace-1-layout.sh"
 
-spawn-sh-at-startup "sleep 3 && codium --enable-features=UseOzonePlatform --ozone-platform=wayland"
+// spawn-sh-at-startup "sleep 3 && codium --enable-features=UseOzonePlatform --ozone-platform=wayland"
 
 hotkey-overlay {
 }
@@ -107,6 +107,7 @@ window-rule {
     match app-id="discord"
     open-on-output "DP-1"
     open-on-workspace "1"
+    open-fullscreen true
 }
 
 // Twitch PWA (Brave) on workspace 1, left monitor (DP-3)
