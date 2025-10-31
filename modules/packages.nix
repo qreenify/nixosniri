@@ -44,6 +44,7 @@
     swayidle
     swaylock
     mako
+    wiremix
 
     # Gaming
     lutris
