@@ -16,6 +16,7 @@
     git
     gh
     sbctl
+    rclone
 
     # Development
     claude-code

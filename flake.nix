@@ -33,6 +33,7 @@
         ./modules/packages.nix
         ./modules/users.nix
         ./modules/desktop.nix
+        ./modules/mounts.nix
 
         # Lanzaboote
         lanzaboote.nixosModules.lanzaboote
