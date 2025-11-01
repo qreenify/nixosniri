@@ -146,25 +146,25 @@ window-rule {
     open-maximized true
 }
 
-// Steam on workspace 3, main monitor (DP-2)
+// Steam on workspace 1, main monitor (DP-2)
 window-rule {
     match app-id="steam"
     open-on-output "DP-2"
-    open-on-workspace "3"
+    open-on-workspace "1"
 }
 
-// Battle.net launcher on workspace 3 with Steam
+// Battle.net launcher on workspace 1 with Steam
 window-rule {
     match title="Battle.net"
     open-on-output "DP-2"
-    open-on-workspace "3"
+    open-on-workspace "1"
 }
 
-// Steam games/launchers - default to workspace 3
+// Steam games/launchers - default to workspace 1 with Steam
 window-rule {
     match app-id="steam_app_0"
     open-on-output "DP-2"
-    open-on-workspace "3"
+    open-on-workspace "1"
 }
 
 // Lutris on workspace 3, main monitor (DP-2)
