@@ -402,15 +402,6 @@
   # === Font Configuration ===
   fonts.fontconfig.enable = true;
 
-  # === File Manager Configuration ===
-  xdg.mimeApps = {
-    enable = true;
-    force = true;
-    defaultApplications = {
-      "inode/directory" = "org.gnome.Nautilus.desktop";
-    };
-  };
-
   # === Packages ===
   home.packages = with pkgs; [
     # Fonts
