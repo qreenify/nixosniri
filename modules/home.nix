@@ -402,6 +402,15 @@
   # === Font Configuration ===
   fonts.fontconfig.enable = true;
 
+  # === File Manager Configuration ===
+  xdg.mimeApps = {
+    enable = true;
+    force = true;
+    defaultApplications = {
+      "inode/directory" = "org.gnome.Nautilus.desktop";
+    };
+  };
+
   # === Packages ===
   home.packages = with pkgs; [
     # Fonts
@@ -414,7 +423,19 @@
     grim
     slurp
     wl-clipboard
-    xwayland-satellite  # Required for XWayland apps (Steam, etc.) to work with Niri
+    xwayland-satellite # Required for XWayland apps (Steam, etc.) to work with Niri
+
+    # File managers
+    nautilus           # GUI file manager for file picker dialogs
+    yazi               # Terminal file manager
+
+    # Yazi enhancements
+    ffmpegthumbnailer  # Video thumbnails
+    poppler-utils      # PDF preview
+    fd                 # Better file search
+    ripgrep            # Better content search
+    fzf                # Fuzzy finding
+    zoxide             # Smart directory jumping
   ];
 
   # === Auto-backup NixOS config to GitHub ===
@@ -451,7 +472,7 @@
   };
 
   # === Rclone Google Drive Mount ===
-  systemd.user.services.rclone-gdrive = {
+   systemd.user.services.rclone-gdrive = {
     Unit = {
       Description = "Rclone mount for Google Team Drive (Wonderland)";
       After = [ "network-online.target" ];
@@ -470,4 +491,5 @@
       WantedBy = [ "default.target" ];
     };
   };
+
 }

@@ -4,6 +4,12 @@
   # Niri compositor
   programs.niri.enable = true;
 
+  # Hyprland - Stable tiling Wayland compositor
+  programs.hyprland.enable = true;
+
+  # COSMIC Desktop Environment (experimental)
+  services.desktopManager.cosmic.enable = true;
+
   # Enable XWayland for compatibility (Steam, etc.)
   programs.xwayland.enable = true;
 
@@ -12,6 +18,9 @@
 
   # Display manager
   services.displayManager.ly.enable = true;
+
+  # Flatpak support (for Discord with Krisp)
+  services.flatpak.enable = true;
 
   # Security
   security.polkit.enable = true;

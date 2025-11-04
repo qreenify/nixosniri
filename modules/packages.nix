@@ -36,7 +36,7 @@
     zen-browser.packages."${pkgs.system}".default
 
     # Communication
-    discord
+    # Discord will be installed via Flatpak for Krisp support
 
     # Desktop utilities
     alacritty
