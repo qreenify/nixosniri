@@ -17,7 +17,8 @@
   # programs.waybar.enable = true;  # Disabled to avoid duplicate instances
 
   # Display manager
-  services.displayManager.ly.enable = true;
+  # Using COSMIC's native display manager
+  services.displayManager.cosmic-greeter.enable = true;
 
   # Flatpak support (for Discord with Krisp)
   services.flatpak.enable = true;
