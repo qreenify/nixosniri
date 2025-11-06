@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=Hyprland Settings
+Comment=Configure your Hyprland desktop environment
+Icon=hyprland-settings
+Exec=hyprland-settings
+Terminal=false
+Categories=Settings;System;
+Keywords=settings;preferences;configuration;hyprland;
