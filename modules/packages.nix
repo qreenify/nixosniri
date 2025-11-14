@@ -46,7 +46,6 @@
     swaylock
     mako
     wiremix
-    xdg-desktop-portal-wlr  # For screen sharing in browsers
 
     # Gaming
     lutris
