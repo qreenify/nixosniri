@@ -36,9 +36,8 @@
     zen-browser.packages."${pkgs.system}".default
 
     # Communication
-    # Discord via Flatpak for Krisp + xwaylandvideobridge for screen sharing
-    xwaylandvideobridge  # Enables screen sharing for XWayland apps like Discord
-    # vesktop  # Alternative Discord client (disabled - using Flatpak + bridge instead)
+    # Discord PWA in browser - native Wayland screen sharing via xdg-desktop-portal-hyprland
+    # No xwaylandvideobridge needed for browser-based Discord
 
     # Desktop utilities
     alacritty
