@@ -12,3 +12,6 @@ flake.lock
 *.backup
 *~
 .*.swp
+
+# Rust build artifacts
+**/target/
