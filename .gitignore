@@ -1,13 +1,3 @@
-# Hardware-specific (auto-generated)
-hardware-configuration.nix
-
-# Result symlinks from Nix builds
-result
-result-*
-
-# Flake lock file (can be regenerated)
-flake.lock
-
 # Backup files
 *.backup
 *~
@@ -15,3 +5,9 @@ flake.lock
 
 # Rust build artifacts
 **/target/
+
+# Build outputs
+result
+result-*
+dist/
+build/
