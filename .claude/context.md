@@ -55,13 +55,23 @@ This workspace (`~/claude/`) is for **projects and general development work**.
 - **NEVER use `&&` for commands** - user has Nushell, use `;` instead
 - **Home-manager file conflicts**: ALWAYS use `force = true` when deploying files that might already exist
   ```nix
-  home.file.".config/somedir" = {
+  # For files in ~/.config/ - use xdg.configFile:
+  xdg.configFile."somedir" = {
     source = ../path;
     recursive = true;
     force = true;  # Prevents "file would be clobbered" errors
   };
+
+  # For files elsewhere in $HOME - use home.file:
+  home.file.".local/share/somedir" = {
+    source = ../path;
+    recursive = true;
+    force = true;
+  };
   ```
   - Especially important for theme files, configs that get modified, or any files that may exist from previous runs
+  - `xdg.configFile."path"` → deploys to `~/.config/path`
+  - `home.file.".some/path"` → deploys to `~/.some/path`
 
 ## Important Rules
 
