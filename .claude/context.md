@@ -24,6 +24,36 @@ This workspace (`~/claude/`) is for **projects and general development work**.
 └── (other projects)
 ```
 
+## System Information
+
+### Shell
+- **User uses Nushell** - NOT bash
+- Command chaining: Use `;` instead of `&&`
+  - ✅ Correct: `pkill waybar; hyprctl dispatch exec waybar`
+  - ❌ Wrong: `pkill waybar && hyprctl dispatch exec waybar`
+
+### Hardware
+- **GPU**: NVIDIA GeForce RTX 4080
+- **Monitors**: 4 displays
+  - DP-2: 2560x1440@155Hz (main monitor, workspaces 1-6)
+  - HDMI-A-1: 1920x1080@60Hz (top, workspace 8)
+  - DP-1: 2560x1440@60Hz (right, workspace 9, vertical)
+  - DP-3: 2560x1440@60Hz (left, workspace 7, vertical)
+
+### Desktop Environment
+- **Compositor**: Hyprland (primary), Niri (available but not actively used)
+- **Display Manager**: Ly (TUI greeter)
+- **Bar**: Waybar (started by Hyprland, NOT systemd)
+- **Launcher**: Fuzzel
+- **Terminal**: Alacritty
+- **Cursor**: macOS-BigSur (apple-cursor package)
+
+### Critical NixOS Behavior
+- **Config changes require rebuild**: `rebuild` command
+- **Changes take effect**: After rebuild AND logout/login (or reboot for kernel/boot changes)
+- **Waybar config changes**: Require rebuild, then waybar reload
+- **NEVER use `&&` for commands** - user has Nushell, use `;` instead
+
 ## Important Rules
 
 ### When Working with NixOS Configs
@@ -37,6 +67,8 @@ This workspace (`~/claude/`) is for **projects and general development work**.
 - Update any NixOS module
 
 **NEVER** edit NixOS config files in `~/claude/` - they don't exist here anymore.
+
+**ALWAYS remind user to rebuild after config changes**: `rebuild`
 
 ### Workflow for NixOS Changes
 
