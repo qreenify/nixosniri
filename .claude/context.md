@@ -118,10 +118,19 @@ This directory is for:
 
 ## Git Repositories
 
-- `~/.config/nixos/.git` - NixOS configuration repo
-- `~/claude/.git` - Projects and development repo
+- `~/.config/nixos/.git` - NixOS configuration repo (synced to GitHub)
+- `~/claude/.git` - Projects and development repo (auto-backup every hour)
 
 These are **separate repositories** - don't confuse them.
+
+### NixOS Config GitHub Sync
+
+The `~/.config/nixos/` directory is set up with another Claude session for continuous GitHub sync.
+
+**Important**: When editing NixOS configs, changes will be automatically committed and pushed to GitHub. This ensures:
+- Version control for all system configurations
+- Easy rollback if needed
+- Backup of the entire NixOS setup
 
 ## Dual Boot Setup
 
@@ -156,3 +165,115 @@ sudo umount /mnt/win-efi
 - Only need to recopy if `/boot` partition is completely wiped
 
 **Note:** If you ever recreate the `/boot` partition from scratch, you'll need to repeat this copy step.
+
+## Omarchy Theme System
+
+### Overview
+The system uses **Omarchy theming** for consistent visual appearance across all applications.
+
+- **Theme location**: `~/.config/omarchy/themes/`
+- **Current theme symlink**: `~/.config/omarchy/current/theme`
+- **Theme switcher**: `theme <theme-name>` command
+- **Wallpaper selector**: `wallpaper` command (with image preview)
+
+### Supported Applications
+
+**Live theming (instant reload):**
+- ✅ Waybar (CSS generated dynamically)
+- ✅ Hyprland (border colors)
+- ✅ Mako notifications
+- ✅ Walker launcher
+- ✅ Alacritty terminal (copies theme file for live reload)
+- ✅ Kitty terminal (SIGUSR1 signal)
+- ✅ Ghostty terminal (SIGUSR2 signal)
+- ✅ Btop system monitor
+- ✅ Wallpaper via swaybg
+
+**Manual theming:**
+- 📝 Vesktop/Discord (generates custom CSS)
+- 📝 Browsers (no standard API - GTK theme only)
+
+### Theme Script Details
+
+**Location**: `~/.config/nixos/scripts/omarchy-theme-set`
+
+**Key features:**
+- Generates waybar CSS from theme colors + static rules
+- Copies Alacritty theme to avoid symlink detection bug (#5852)
+- Sends reload signals to running applications
+- Sets wallpaper (first image in backgrounds/ directory)
+
+**Important implementation notes:**
+- Waybar style.css is NOT managed by home-manager (dynamically generated)
+- Alacritty theme.toml is created by activation script, updated by theme script
+- Browser theming disabled (requires omarchy-chromium fork, not in nixpkgs)
+
+### Wallpaper Selector
+
+**Command**: `wallpaper [theme-name]`
+
+**Features:**
+- Interactive fzf-based selection
+- **Pixel-perfect preview** in Kitty/Ghostty terminals (Kitty graphics protocol)
+- Text-based preview in other terminals (chafa)
+- Auto-detects current theme if no argument provided
+
+**Usage:**
+```bash
+wallpaper              # Select from current theme
+wallpaper catppuccin   # Select from specific theme
+kitty -e wallpaper     # Force pixel-perfect preview
+```
+
+## Terminal Preferences
+
+### Installed Terminals
+1. **Alacritty** - Primary daily driver, fastest startup
+2. **Kitty** - For pixel-perfect image previews
+3. **Ghostty** - Modern alternative with Kitty protocol support
+
+### User Preferences
+- **Primary terminal**: Alacritty (minimal, fast)
+- **Image work**: Kitty or Ghostty (pixel-perfect wallpaper previews)
+- **Shell**: Nushell (use `;` for command chaining, not `&&`)
+
+## Recent Session Work (2025-11-15)
+
+### Theme System Fixes
+1. **Waybar theming** - Fixed gray waybar issue:
+   - Root cause: Theme files only had color variables, no CSS rules
+   - Solution: Created `generate-waybar-style` script to combine colors + rules
+   - Waybar style.css now dynamically generated, not symlinked
+
+2. **Alacritty live reload** - Fixed theme not changing in open terminals:
+   - Root cause: Alacritty bug #5852 - imported symlinks don't trigger reload
+   - Solution: Copy theme to real file instead of symlink
+   - Uses home.activation script for initial file creation
+
+3. **Theme script hanging** - Fixed infinite hang on browser theming:
+   - Root cause: `wait` command waiting for browser processes that never exit
+   - Solution: Removed `wait`, browsers disabled (not supported without omarchy-chromium)
+
+4. **Wallpaper selector** - Created interactive preview tool:
+   - Uses fzf for selection
+   - Pixel-perfect preview in Kitty/Ghostty
+   - Fallback to chafa in other terminals
+   - Auto-detects current theme
+
+### Packages Added
+- `chafa` - Terminal image viewer
+- `kitty` - GPU-accelerated terminal with image protocol
+- `ghostty` - Modern terminal with Kitty protocol support
+- `playerctl` - Media player control for waybar mpris module
+
+### Scripts Created/Modified
+- `omarchy-theme-set` - Theme switcher (fixed hanging, removed browser theming)
+- `generate-waybar-style` - Generates waybar CSS from theme colors
+- `omarchy-wallpaper-select` - Interactive wallpaper selector with preview
+- `mic-rgb-sync` - Fixed to use wpctl instead of pactl
+
+### Configuration Changes
+- Fixed double-slash in theme symlink paths
+- Added Alacritty theme initialization via home.activation
+- Removed waybar style.css from home-manager (dynamically generated now)
+- Added shell alias: `wallpaper` for wallpaper selector
