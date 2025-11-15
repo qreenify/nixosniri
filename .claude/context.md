@@ -53,7 +53,11 @@ This workspace (`~/claude/`) is for **projects and general development work**.
 - **Changes take effect**: After rebuild AND logout/login (or reboot for kernel/boot changes)
 - **Waybar config changes**: Require rebuild, then waybar reload
 - **NEVER use `&&` for commands** - user has Nushell, use `;` instead
-- **Home-manager file conflicts**: ALWAYS use `force = true` when deploying files that might already exist
+
+### ⚠️ CRITICAL: Home-manager File Conflicts
+**ALWAYS use `force = true` for ALL xdg.configFile and home.file declarations!**
+
+This is **NOT optional** - it prevents "file would be clobbered" errors on rebuild.
   ```nix
   # For files in ~/.config/ - use xdg.configFile:
   xdg.configFile."somedir" = {
@@ -277,3 +281,5 @@ kitty -e wallpaper     # Force pixel-perfect preview
 - Added Alacritty theme initialization via home.activation
 - Removed waybar style.css from home-manager (dynamically generated now)
 - Added shell alias: `wallpaper` for wallpaper selector
+- Added Kitty and Ghostty terminal configurations with theme support
+- **Lesson learned**: ALWAYS add `force = true` to xdg.configFile/home.file (made more prominent in context)
