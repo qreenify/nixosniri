@@ -53,6 +53,15 @@ This workspace (`~/claude/`) is for **projects and general development work**.
 - **Changes take effect**: After rebuild AND logout/login (or reboot for kernel/boot changes)
 - **Waybar config changes**: Require rebuild, then waybar reload
 - **NEVER use `&&` for commands** - user has Nushell, use `;` instead
+- **Home-manager file conflicts**: ALWAYS use `force = true` when deploying files that might already exist
+  ```nix
+  home.file.".config/somedir" = {
+    source = ../path;
+    recursive = true;
+    force = true;  # Prevents "file would be clobbered" errors
+  };
+  ```
+  - Especially important for theme files, configs that get modified, or any files that may exist from previous runs
 
 ## Important Rules
 
