@@ -283,3 +283,63 @@ kitty -e wallpaper     # Force pixel-perfect preview
 - Added shell alias: `wallpaper` for wallpaper selector
 - Added Kitty and Ghostty terminal configurations with theme support
 - **Lesson learned**: ALWAYS add `force = true` to xdg.configFile/home.file (made more prominent in context)
+
+## Session Work (2025-11-15 Continued)
+
+### Mouse Cursor Lag Fixes
+
+#### Problem 1: Song Change Lag (FIXED ✅)
+- **Symptom**: Mouse froze when Waybar mpris updated (song changes)
+- **Root cause**: CSS `transition: all 0.5s;` on all elements caused compositor lag during text updates
+- **Solution**:
+  - Removed global transitions from `generate-waybar-style`
+  - Added `transition: none;` specifically to `#mpris` module
+  - Added `"interval": 2` and `"tooltip": false` to mpris config
+  - Kept targeted transitions only for workspaces (0.3s) and tray (opacity)
+- **Files changed**:
+  - `/home/qreenify/.config/nixos/scripts/generate-waybar-style`
+  - `/home/qreenify/.config/nixos/config/waybar/config.jsonc`
+
+#### Problem 2: Random 1-Second Freezes (FIXED ✅)
+- **Symptom**: Random 1-second mouse freezes "after a little while"
+- **Root cause**: RTX 4080 power management - GPU idles at 210 MHz, freezes occur when ramping to ~2500 MHz
+- **Diagnosis**: Known issue from July 2025 NVIDIA forums - "GPU reduces frequency too much or takes too long to increase it"
+- **Solution**: Force NVIDIA PowerMizer to "Prefer Maximum Performance" mode
+  - Keeps GPU clocks at ~2500 MHz (core) and ~11000 MHz (memory)
+  - Prevents lag from clock ramping
+- **Files changed**:
+  - `/home/qreenify/.config/nixos/modules/nvidia.nix` - Added systemd service for power mode
+  - Test command: `nvidia-settings -a "[gpu:0]/GPUPowerMizerMode=1"`
+
+### Hyprland Performance Optimizations
+
+Added to `hyprland.conf`:
+- `vfr = true` - Variable frame rate for lower GPU usage when idle
+- `vrr = 0` - VRR disabled (better for multi-monitor with different refresh rates)
+- `enable_hyprcursor = false` - Better cursor performance
+- **Note**: Explicit sync is automatic with NVIDIA 555+ drivers (no manual config needed)
+
+### Theme System Optimization
+
+**Problem**: NixOS rebuilds took too long due to 20+ themes being copied to nix store
+
+**Solution**: Move themes outside nix store
+- Only `base` theme deployed via NixOS (always available for fresh installs)
+- Other themes synced via `theme-sync` script from omarchy GitHub repo
+- Themes stored in `~/.config/theme/themes/` (outside nix store)
+- Added shell alias: `theme-sync` to download/update themes
+
+**Files changed**:
+- `/home/qreenify/.config/nixos/modules/home.nix` - Deploy only base theme
+- `/home/qreenify/.config/nixos/scripts/theme-sync` - Download themes script
+
+### Critical NVIDIA Notes
+
+**RTX 4080 + Hyprland + Multi-Monitor Setup**:
+- 4 monitors with different refresh rates (155Hz, 60Hz, 59.95Hz, 59.95Hz)
+- Software cursors required: `no_hardware_cursors = true`
+- Power management must be aggressive to prevent freezes:
+  - PowerMizer Mode 1 (Prefer Maximum Performance)
+  - Persistence mode enabled
+- Explicit sync automatic with NVIDIA 555+ drivers
+- VRR disabled for mixed refresh rates
