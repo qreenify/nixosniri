@@ -71,3 +71,37 @@ This directory is for:
 - `~/claude/.git` - Projects and development repo
 
 These are **separate repositories** - don't confuse them.
+
+## Dual Boot Setup
+
+### Windows Bootloader (Manual Setup)
+
+The system uses **systemd-boot** which can only see bootloaders on its own EFI partition.
+
+**Setup (done once, persists across NixOS rebuilds):**
+
+1. Windows EFI partition: `/dev/nvme2n1p3` (labeled "SYSTEM")
+2. NixOS EFI partition: `/dev/nvme1n1p1` (mounted at `/boot`)
+
+To make Windows appear in systemd-boot menu:
+
+```bash
+# Mount Windows EFI partition
+sudo mkdir -p /mnt/win-efi
+sudo mount /dev/nvme2n1p3 /mnt/win-efi
+
+# Copy Windows bootloader to NixOS EFI partition
+sudo mkdir -p /boot/EFI/Microsoft
+sudo cp -r /mnt/win-efi/EFI/Microsoft/Boot /boot/EFI/Microsoft/
+
+# Unmount
+sudo umount /mnt/win-efi
+```
+
+**Why this is safe for reproducibility:**
+- NixOS only manages `/boot/loader/` and `/boot/EFI/Linux/`
+- Windows files in `/boot/EFI/Microsoft/` are ignored by NixOS
+- These files persist across all NixOS rebuilds
+- Only need to recopy if `/boot` partition is completely wiped
+
+**Note:** If you ever recreate the `/boot` partition from scratch, you'll need to repeat this copy step.
