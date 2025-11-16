@@ -17,6 +17,8 @@
 
 ## Proposed Clean Structure
 
+**Note**: modules/ and home/ are MERGED - single-user setup doesn't need the separation!
+
 ```
 ~/.config/nixos/
 ├── 📋 docs/                     # ALL documentation (move from root)
@@ -38,8 +40,7 @@
 ├── 🏠 hosts/                    # Per-machine configurations
 │   ├── qreenify/                 # Main machine
 │   │   ├── hardware-configuration.nix
-│   │   ├── configuration.nix     # Host-specific settings
-│   │   └── home.nix              # User config (base + personal)
+│   │   └── configuration.nix     # Host-specific settings
 │   │
 │   ├── vm/                       # VM for testing
 │   │   └── configuration.nix
@@ -47,45 +48,39 @@
 │   └── iso/                      # ISO build
 │       └── configuration.nix
 │
-├── 📦 modules/                  # System modules
+├── 📦 modules/                  # System + User configs (MERGED!)
 │   ├── base/                     # Base system (for ISO)
-│   │   ├── boot.nix
-│   │   ├── networking.nix
-│   │   ├── locale.nix
-│   │   ├── desktop.nix
-│   │   ├── audio.nix
-│   │   ├── nvidia.nix
-│   │   ├── packages.nix
-│   │   ├── users.nix
-│   │   └── default.nix          # Imports all base modules
+│   │   # System-level configs
+│   │   ├── boot.nix              # Bootloader
+│   │   ├── networking.nix        # Network manager
+│   │   ├── locale.nix            # Timezone, locale
+│   │   ├── desktop.nix           # Hyprland/GDM (system)
+│   │   ├── audio.nix             # Pipewire
+│   │   ├── nvidia.nix            # Nvidia drivers
+│   │   ├── packages.nix          # System packages
+│   │   ├── users.nix             # User accounts
+│   │   # User-level configs (home-manager)
+│   │   ├── shell.nix             # Nushell config
+│   │   ├── neovim.nix            # Neovim config
+│   │   ├── terminals.nix         # Ghostty, Alacritty, Kitty
+│   │   ├── hyprland.nix          # Hyprland user config
+│   │   ├── theming.nix           # GTK, Qt, cursors, theme system
+│   │   └── default.nix           # Imports all base
 │   │
 │   ├── personal/                 # Personal additions
-│   │   ├── gaming.nix
-│   │   ├── virtualization.nix
-│   │   ├── services.nix
-│   │   ├── packages.nix
-│   │   └── default.nix          # Imports all personal
+│   │   # System-level
+│   │   ├── gaming.nix            # Steam, gamemode
+│   │   ├── virtualization.nix    # virt-manager, libvirtd
+│   │   ├── services.nix          # Sunshine, OpenRGB
+│   │   ├── packages.nix          # Personal packages
+│   │   # User-level
+│   │   ├── git.nix               # Git config
+│   │   ├── user-services.nix     # User systemd services
+│   │   └── default.nix           # Imports all personal
 │   │
 │   └── optional/                 # Optional features
-│       ├── lanzaboote.nix       # Secure boot
-│       ├── mounts.nix           # Custom mounts
-│       └── backup.nix           # Auto-backup service
-│
-├── 👤 home/                     # Home-manager configs
-│   ├── base/                     # Base user environment
-│   │   ├── shell.nix             # Nushell
-│   │   ├── neovim.nix
-│   │   ├── terminals.nix         # Ghostty, Alacritty, Kitty
-│   │   ├── desktop.nix           # Hyprland, Waybar, Mako
-│   │   ├── theming.nix           # GTK, Qt, cursors
-│   │   ├── packages.nix          # Base packages
-│   │   └── default.nix
-│   │
-│   └── personal/                 # Personal user config
-│       ├── git.nix               # Personal git settings
-│       ├── services.nix          # Systemd user services
-│       ├── autostarts.nix        # App autostarts (FUTURE)
-│       └── default.nix
+│       ├── lanzaboote.nix        # Secure boot
+│       └── mounts.nix            # Custom mounts
 │
 ├── 🎨 theme/                    # Theme system (unchanged)
 │   ├── bin/                      # Theme management scripts
