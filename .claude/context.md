@@ -186,7 +186,7 @@ The system uses **Omarchy theming** for consistent visual appearance across all 
 - ✅ Waybar (CSS generated dynamically)
 - ✅ Hyprland (border colors)
 - ✅ Mako notifications
-- ✅ Walker launcher
+- ✅ Fuzzel launcher (copies theme file)
 - ✅ Alacritty terminal (copies theme file for live reload)
 - ✅ Kitty terminal (SIGUSR1 signal)
 - ✅ Ghostty terminal (SIGUSR2 signal)
