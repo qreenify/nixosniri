@@ -307,3 +307,12 @@ This keeps GPU clocks at ~2500 MHz (core) and ~11000 MHz (memory) to prevent lag
 - Also set `"interval": 2` and `"tooltip": false` in waybar mpris config
 
 This is handled by the `generate-waybar-style` script.
+
+#DO
+ask if anything is unclear
+remember we are building a great desktop/laptop experience for anyone to use.
+
+#DONT
+- ❌ Create README.md or summary files.
+- ❌ Add unnecessary comments.
+
