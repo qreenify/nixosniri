@@ -27,7 +27,7 @@ This directory (`~/claude/`) is for **development projects and general work**.
 ### Hardware
 - **GPU**: NVIDIA GeForce RTX 4080
 - **Monitors**: 4 displays (155Hz main + 3x 60Hz)
-- **Shell**: Nushell
+- **Shell**: Fish
 - **Compositor**: Hyprland (primary)
 
 ### Key Applications
@@ -117,7 +117,7 @@ rebuild
 
 ### Important Notes
 
-- **Shell**: User has Nushell - use `;` instead of `&&` for command chaining
+- **Shell**: User has Fish - use `&&` or `;` for command chaining
 - **Home-manager**: Use `force = true` for files that might exist
 - **Changes take effect**: After rebuild + logout/login (or reboot for kernel changes)
 

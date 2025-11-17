@@ -40,7 +40,7 @@ Building a **modular, themeable NixOS distribution** with:
 - **AI Assistant**: Claude Code
 
 ### Theme System
-- **Engine**: Custom bash/nushell scripts
+- **Engine**: Custom bash/fish scripts
 - **Themes**: 20+ themes (pulsar, catppuccin, gruvbox, dracula, etc.)
 - **Supported Apps**:
   - Terminals: Alacritty, Kitty, Ghostty
@@ -364,7 +364,7 @@ When you start working on this project:
 - **NixOS Manual**: https://nixos.org/manual/nixos/stable/
 - **Home Manager**: https://nix-community.github.io/home-manager/
 - **Hyprland Wiki**: https://wiki.hyprland.org/
-- **Nushell Book**: https://www.nushell.sh/book/
+- **Fish Shell**: https://fishshell.com/docs/current/
 
 ---
 
