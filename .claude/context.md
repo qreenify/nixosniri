@@ -12,10 +12,10 @@ This workspace (`~/claude/`) is for **projects and general development work**.
 ~/.config/nixos/          # NixOS system configuration (separate git repo)
 ├── flake.nix
 ├── modules/              # System modules (boot, networking, packages, etc.)
-├── config/               # Application configs (niri, waybar, fuzzel)
-├── scripts/              # System scripts (audio, mic controls)
-├── deploy.sh             # Deploy configs to /etc/nixos
-└── rebuild.sh            # Deploy + rebuild NixOS
+├── config/               # Application configs (niri, waybar, hypr, alacritty, etc.)
+├── scripts/              # System scripts (theme, audio, mic controls)
+├── tools/                # Build tools (rebuild.sh, deploy.sh, vm-test.sh)
+└── theme/                # Theme system (themes, configs, scripts)
 
 ~/claude/                 # This directory - projects & development
 ├── .claude/              # Claude Code context (this file)
@@ -27,10 +27,10 @@ This workspace (`~/claude/`) is for **projects and general development work**.
 ## System Information
 
 ### Shell
-- **User uses Nushell** - NOT bash
-- Command chaining: Use `;` instead of `&&`
-  - ✅ Correct: `pkill waybar; hyprctl dispatch exec waybar`
-  - ❌ Wrong: `pkill waybar && hyprctl dispatch exec waybar`
+- **User uses Fish** - NOT bash or Nushell
+- Command chaining: Fish supports both `;` and `&&` like bash
+  - Both work: `pkill waybar; hyprctl dispatch exec waybar`
+  - Both work: `pkill waybar && hyprctl dispatch exec waybar`
 
 ### Hardware
 - **GPU**: NVIDIA GeForce RTX 4080
@@ -44,15 +44,15 @@ This workspace (`~/claude/`) is for **projects and general development work**.
 - **Compositor**: Hyprland (primary), Niri (available but not actively used)
 - **Display Manager**: Ly (TUI greeter)
 - **Bar**: Waybar (started by Hyprland, NOT systemd)
-- **Launcher**: Fuzzel
-- **Terminal**: Alacritty
+- **Launcher**: Rofi (with plugins: rofi-calc, rofi-file-browser, rofimoji)
+- **Terminal**: Alacritty (primary), Kitty, Ghostty (all installed)
+- **Browser**: Zen (primary), Brave (installed)
 - **Cursor**: macOS-BigSur (apple-cursor package)
 
 ### Critical NixOS Behavior
 - **Config changes require rebuild**: `rebuild` command
 - **Changes take effect**: After rebuild AND logout/login (or reboot for kernel/boot changes)
 - **Waybar config changes**: Require rebuild, then waybar reload
-- **NEVER use `&&` for commands** - user has Nushell, use `;` instead
 
 ### ⚠️ CRITICAL: Home-manager File Conflicts
 **ALWAYS use `force = true` for ALL xdg.configFile and home.file declarations!**
@@ -86,7 +86,7 @@ This is **NOT optional** - it prevents "file would be clobbered" errors on rebui
 - Modify system settings
 - Change boot configuration
 - Update desktop environment settings
-- Modify niri/waybar/fuzzel configs
+- Modify niri/waybar/hypr/rofi configs
 - Update any NixOS module
 
 **NEVER** edit NixOS config files in `~/claude/` - they don't exist here anymore.
@@ -170,13 +170,13 @@ sudo umount /mnt/win-efi
 
 **Note:** If you ever recreate the `/boot` partition from scratch, you'll need to repeat this copy step.
 
-## Omarchy Theme System
+## Wonderland Theme System
 
 ### Overview
-The system uses **Omarchy theming** for consistent visual appearance across all applications.
+The system uses **Wonderland theming** for consistent visual appearance across all applications.
 
-- **Theme location**: `~/.config/omarchy/themes/`
-- **Current theme symlink**: `~/.config/omarchy/current/theme`
+- **Theme location**: `~/.config/nixos/theme/themes/` (in NixOS config) and `~/.config/theme/themes/`
+- **Current theme symlink**: `~/.config/theme/current/theme`
 - **Theme switcher**: `theme <theme-name>` command
 - **Wallpaper selector**: `wallpaper` command (with image preview)
 
@@ -186,12 +186,12 @@ The system uses **Omarchy theming** for consistent visual appearance across all 
 - ✅ Waybar (CSS generated dynamically)
 - ✅ Hyprland (border colors)
 - ✅ Mako notifications
-- ✅ Fuzzel launcher (copies theme file)
+- ✅ Rofi launcher (generates theme file dynamically)
 - ✅ Alacritty terminal (copies theme file for live reload)
 - ✅ Kitty terminal (SIGUSR1 signal)
 - ✅ Ghostty terminal (SIGUSR2 signal)
 - ✅ Btop system monitor
-- ✅ Wallpaper via swaybg
+- ✅ Wallpaper via hyprpaper
 
 **Manual theming:**
 - 📝 Vesktop/Discord (generates custom CSS)
@@ -199,18 +199,20 @@ The system uses **Omarchy theming** for consistent visual appearance across all 
 
 ### Theme Script Details
 
-**Location**: `~/.config/nixos/scripts/omarchy-theme-set`
+**Location**: `~/.script/theme` (symlinked from `~/.config/nixos/scripts/theme-set`)
 
 **Key features:**
 - Generates waybar CSS from theme colors + static rules
+- Generates rofi theme dynamically
 - Copies Alacritty theme to avoid symlink detection bug (#5852)
 - Sends reload signals to running applications
-- Sets wallpaper (first image in backgrounds/ directory)
+- Sets wallpaper via hyprpaper
 
 **Important implementation notes:**
 - Waybar style.css is NOT managed by home-manager (dynamically generated)
+- Rofi theme is dynamically generated
 - Alacritty theme.toml is created by activation script, updated by theme script
-- Browser theming disabled (requires omarchy-chromium fork, not in nixpkgs)
+- Browser theming disabled (no standard API available)
 
 ### Wallpaper Selector
 
@@ -239,7 +241,7 @@ kitty -e wallpaper     # Force pixel-perfect preview
 ### User Preferences
 - **Primary terminal**: Alacritty (minimal, fast)
 - **Image work**: Kitty or Ghostty (pixel-perfect wallpaper previews)
-- **Shell**: Nushell (use `;` for command chaining, not `&&`)
+- **Shell**: Fish (supports both `;` and `&&` for command chaining)
 
 ## Recent Session Work (2025-11-15)
 
@@ -256,7 +258,7 @@ kitty -e wallpaper     # Force pixel-perfect preview
 
 3. **Theme script hanging** - Fixed infinite hang on browser theming:
    - Root cause: `wait` command waiting for browser processes that never exit
-   - Solution: Removed `wait`, browsers disabled (not supported without omarchy-chromium)
+   - Solution: Removed `wait`, browsers disabled (no standard theming API available)
 
 4. **Wallpaper selector** - Created interactive preview tool:
    - Uses fzf for selection
@@ -271,9 +273,10 @@ kitty -e wallpaper     # Force pixel-perfect preview
 - `playerctl` - Media player control for waybar mpris module
 
 ### Scripts Created/Modified
-- `omarchy-theme-set` - Theme switcher (fixed hanging, removed browser theming)
+- `theme-set` - Theme switcher (generates rofi theme, waybar CSS, updates terminals)
 - `generate-waybar-style` - Generates waybar CSS from theme colors
-- `omarchy-wallpaper-select` - Interactive wallpaper selector with preview
+- `generate-rofi-theme` - Generates rofi theme from current theme colors
+- `theme-wallpaper-select` - Interactive wallpaper selector with preview
 - `mic-rgb-sync` - Fixed to use wpctl instead of pactl
 
 ### Configuration Changes
@@ -325,8 +328,8 @@ Added to `hyprland.conf`:
 
 **Solution**: Move themes outside nix store
 - Only `base` theme deployed via NixOS (always available for fresh installs)
-- Other themes synced via `theme-sync` script from omarchy GitHub repo
-- Themes stored in `~/.config/theme/themes/` (outside nix store)
+- Other themes synced via `theme-sync` script from external repo
+- Themes stored in `~/.config/nixos/theme/themes/` and `~/.config/theme/themes/`
 - Added shell alias: `theme-sync` to download/update themes
 
 **Files changed**:
