@@ -31,7 +31,7 @@ This directory (`~/claude/`) is for **development projects and general work**.
 - **Compositor**: Hyprland (primary)
 
 ### Key Applications
-- **Terminal**: Alacritty (primary), Kitty/Ghostty (image support)
+- **Terminal**: ghostty (primary), ghostty/Ghostty (image support)
 - **Bar**: Waybar (dynamic theme generation)
 - **Launcher**: Fuzzel
 - **Notifications**: Mako
@@ -50,7 +50,7 @@ theme catppuccin        # Switch to catppuccin theme
 # Wallpaper selection (with preview)
 wallpaper               # Select from current theme
 wallpaper catppuccin    # Select from specific theme
-kitty -e wallpaper      # Get pixel-perfect preview
+ghostty -e wallpaper      # Get pixel-perfect preview
 
 # System management
 rebuild                 # Deploy and rebuild NixOS
@@ -61,7 +61,7 @@ rebuild dry-build       # Preview what would change
 
 **Live theming (instant reload):**
 - ✅ Waybar, Hyprland, Mako, Walker
-- ✅ Alacritty, Kitty, Ghostty, Btop
+- ✅ ghostty, ghostty, Ghostty, Btop
 - ✅ Wallpaper (swaybg)
 
 **Generated theming:**
@@ -72,19 +72,19 @@ rebuild dry-build       # Preview what would change
 1. **Theme files**: `~/.config/omarchy/themes/<theme-name>/`
    - `waybar.css` - Color variables
    - `hyprland.conf` - Border colors
-   - `alacritty.toml` - Terminal colors
+   - `ghostty.toml` - Terminal colors
    - `backgrounds/` - Wallpaper images
 
 2. **Theme switcher**: `~/.script/theme <theme-name>`
    - Updates symlink: `~/.config/omarchy/current/theme`
    - Generates waybar CSS (colors + rules)
-   - Copies Alacritty theme (avoids symlink bug)
+   - Copies ghostty theme (avoids symlink bug)
    - Sends reload signals to running apps
    - Sets wallpaper
 
 3. **Wallpaper selector**: `~/.script/omarchy-wallpaper-select`
    - Interactive fzf-based selection
-   - Pixel-perfect preview in Kitty/Ghostty
+   - Pixel-perfect preview in ghostty/Ghostty
    - Fallback to chafa in other terminals
 
 ## Git Repositories
@@ -127,22 +127,22 @@ rebuild
 
 **Problems Fixed:**
 1. ❌ Waybar stayed gray when switching themes
-2. ❌ Alacritty didn't live-reload themes in open terminals
+2. ❌ ghostty didn't live-reload themes in open terminals
 3. ❌ Theme script hung infinitely on browser theming
 4. ❌ Mic RGB sync stopped working
 5. ❌ No way to choose wallpaper (always picked first one)
 
 **Solutions Implemented:**
 1. ✅ Created `generate-waybar-style` - combines theme colors with CSS rules
-2. ✅ Fixed Alacritty live reload - copies theme file instead of symlink
+2. ✅ Fixed ghostty live reload - copies theme file instead of symlink
 3. ✅ Removed browser theming (requires omarchy-chromium fork, not available)
 4. ✅ Fixed mic-rgb-sync to use wpctl instead of pactl
 5. ✅ Created interactive wallpaper selector with image preview
 
 **New Features:**
-- 🎨 Pixel-perfect wallpaper previews in Kitty/Ghostty terminals
+- 🎨 Pixel-perfect wallpaper previews in ghostty/Ghostty terminals
 - 🖼️ Interactive wallpaper selection with fzf
-- 🎯 Live theme reload in all open Alacritty windows
+- 🎯 Live theme reload in all open ghostty windows
 - 🔧 Dynamically generated waybar styling
 
 ## Projects
@@ -156,7 +156,7 @@ rebuild
 
 ## User Preferences
 
-- **Terminal**: Alacritty for daily use, Kitty/Ghostty for image work
+- **Terminal**: ghostty for daily use, ghostty/Ghostty for image work
 - **Theme**: Omarchy system with live reload
 - **Workflow**: Make changes in `~/.config/nixos/`, rebuild, test
 - **Backup**: Both repos auto-sync to GitHub
