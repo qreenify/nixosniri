@@ -1,0 +1,18 @@
+[package]
+name = "wonderland-audio"
+version.workspace = true
+edition.workspace = true
+
+[features]
+default = []
+pipewire = ["dep:pipewire", "dep:libspa"]
+
+[dependencies]
+serde = { workspace = true }
+serde_json = { workspace = true }
+thiserror = { workspace = true }
+tracing = { workspace = true }
+tokio = { workspace = true }
+# PipeWire bindings (optional - requires dev libs)
+pipewire = { version = "0.8", optional = true }
+libspa = { version = "0.8", optional = true }

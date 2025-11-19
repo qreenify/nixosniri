@@ -1,0 +1,38 @@
+[workspace]
+resolver = "2"
+
+members = [
+    "crates/wonderland-theme",
+    "crates/wonderland-hyprland",
+    "crates/wonderland-audio",
+    "crates/wonderland-config",
+    "apps/launcher",
+    "apps/file-manager",
+    "apps/settings",
+    "apps/bar",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+authors = ["qreenify"]
+
+[workspace.dependencies]
+# Core
+tokio = { version = "1", features = ["full"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+toml = "0.8"
+thiserror = "1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+# GUI
+iced = { version = "0.13", features = ["tokio", "svg", "image"] }
+
+# Internal crates
+wonderland-theme = { path = "crates/wonderland-theme" }
+wonderland-hyprland = { path = "crates/wonderland-hyprland" }
+wonderland-audio = { path = "crates/wonderland-audio" }
+wonderland-config = { path = "crates/wonderland-config" }

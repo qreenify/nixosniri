@@ -1,0 +1,12 @@
+[package]
+name = "wonderland-files"
+version.workspace = true
+edition.workspace = true
+
+[dependencies]
+iced = { workspace = true }
+tokio = { workspace = true }
+tracing = { workspace = true }
+tracing-subscriber = { workspace = true }
+wonderland-theme = { workspace = true }
+wonderland-config = { workspace = true }
